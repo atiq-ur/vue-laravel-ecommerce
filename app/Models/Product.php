@@ -11,7 +11,17 @@ use Spatie\Sluggable\SlugOptions;
 class Product extends Model
 {
     use HasFactory, HasSlug, SoftDeletes;
-
+    protected $fillable = [
+        'title',
+        'slug',
+        'description',
+        'image',
+        'image_mime',
+        'image_size',
+        'price',
+        'created_by',
+        'updated_by',
+    ];
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
