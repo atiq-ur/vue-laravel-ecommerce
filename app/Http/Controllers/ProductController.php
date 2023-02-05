@@ -9,16 +9,17 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $product = Product::query()->orderBy('updated_at', 'desc')->paginate(5);
+        $products = Product::query()
+            ->where('published', '=', 1)
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
         return view('product.index', [
-            'products' => $product
+            'products' => $products
         ]);
     }
 
-    public function show(Product $product)
+    public function view(Product $product)
     {
-        return view('product.show', [
-            'product' => $product
-        ]);
+        return view('product.view', ['product' => $product]);
     }
 }
