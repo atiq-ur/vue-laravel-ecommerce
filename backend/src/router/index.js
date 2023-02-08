@@ -7,6 +7,8 @@ import Products from "../views/Products/Products.vue";
 import NotFound from "../views/NotFound.vue";
 import store from "../store";
 import AppLayout from "../components/AppLayout.vue";
+import Orders from "../views/Orders/Orders.vue";
+import OrderView from "../views/Orders/OrderView.vue";
 
 
 const routes = [
@@ -49,16 +51,16 @@ const routes = [
             //     name: 'app.customers.view',
             //     component: CustomerView
             // },
-            // {
-            //     path: 'orders',
-            //     name: 'app.orders',
-            //     component: Orders
-            // },
-            // {
-            //     path: 'orders/:id',
-            //     name: 'app.orders.view',
-            //     component: OrderView
-            // },
+            {
+                path: 'orders',
+                name: 'app.orders',
+                component: Orders
+            },
+            {
+                path: 'orders/:id',
+                name: 'app.orders.view',
+                component: OrderView
+            },
             // {
             //     path: '/report',
             //     name: 'reports',

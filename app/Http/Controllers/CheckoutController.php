@@ -17,10 +17,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CheckoutController extends Controller
 {
+
+    public $stripe;
+
+    public function __construct()
+    {
+        $this->stripe = new \Stripe\StripeClient(
+            env('STRIPE_SECRET_KEY')
+        );
+    }
     public function checkout(Request $request)
     {
         $user = $request->user();
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
 
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
@@ -47,7 +55,7 @@ class CheckoutController extends Controller
                 'unit_price' => $product->price
             ];
         }
-        $session =$stripe->checkout->sessions->create([
+        $session =$this->stripe->checkout->sessions->create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
@@ -88,12 +96,10 @@ class CheckoutController extends Controller
 
     public function success(Request $request)
     {
-        $user = $request->user();
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
 
         try {
             $session_id = $request->get('session_id');
-            $session = $stripe->checkout->sessions->retrieve($session_id);
+            $session = $this->stripe->checkout->sessions->retrieve($session_id);
             if (!$session) {
                 return view('checkout.failure', ['message' => 'Invalid Session ID']);
             }
@@ -108,7 +114,7 @@ class CheckoutController extends Controller
             if ($payment->status === PaymentStatus::Pending->value) {
                 $this->updateOrderAndSession($payment);
             }
-            $customer = $stripe->customers->retrieve($session->customer);
+            $customer = $this->stripe->customers->retrieve($session->customer);
             return view('checkout.success', compact('customer'));
         } catch (NotFoundHttpException $e) {
             throw $e;
@@ -124,8 +130,6 @@ class CheckoutController extends Controller
 
     public function checkoutOrder(Order $order, Request $request)
     {
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-
         $lineItems = [];
         foreach ($order->items as $item) {
             $lineItems[] = [
@@ -141,7 +145,7 @@ class CheckoutController extends Controller
             ];
         }
 
-        $session =$stripe->checkout->sessions->create([
+        $session =$this->stripe->checkout->sessions->create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
@@ -157,8 +161,6 @@ class CheckoutController extends Controller
 
     public function webhook()
     {
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-
         $endpoint_secret = env('WEBHOOK_SECRET_KEY');
 
         $payload = @file_get_contents('php://input');
