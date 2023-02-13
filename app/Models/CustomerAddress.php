@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CustomerAddress extends Model
 {
     use HasFactory;
+
     protected $fillable = ['type', 'address1', 'address2', 'city', 'state', 'zipcode', 'country_code', 'customer_id'];
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'user_id', 'customer_id');
+        return $this->belongsTo(Customer::class);
     }
 
     public function country(): BelongsTo

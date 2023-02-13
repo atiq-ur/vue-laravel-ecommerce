@@ -48,6 +48,7 @@ class ProfileController extends Controller
         } else {
             $shippingData['customer_id'] = $customer->user_id;
             $shippingData['type'] = AddressType::Shipping->value;
+            dd($shippingData);
             CustomerAddress::create($shippingData);
         }
         if ($customer->billingAddress) {
