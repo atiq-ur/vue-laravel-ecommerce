@@ -1,75 +1,23 @@
-<script>
-import { defineComponent, h } from 'vue'
+<template>
+    <Doughnut :data="data" :options="options"/>
+</template>
 
-import { Doughnut } from 'vue-chartjs'
-import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    CategoryScale
-} from 'chart.js'
+<script setup>
+import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js'
+import {Doughnut} from 'vue-chartjs'
+import {defineProps} from 'vue'
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
+ChartJS.register(ArcElement, Tooltip, Legend)
 
-export default defineComponent({
-    name: 'DoughnutChart',
-    components: {
-        Doughnut
+const { data} = defineProps({
+        data: Object,
+    });
+
+const options = {
+    responsive: true,
+    animation: {
+        duration: 1000
     },
-    props: {
-        chartId: {
-            type: String,
-            default: 'doughnut-chart'
-        },
-        width: {
-            type: Number,
-            default: 400
-        },
-        height: {
-            type: Number,
-            default: 400
-        },
-        cssClasses: {
-            default: '',
-            type: String
-        },
-        styles: {
-            type: Object,
-            default: () => {}
-        },
-        plugins: {
-            type: Array,
-            default: () => []
-        },
-        data: {
-            type: Object,
-            required: true
-        }
-    },
-    setup(props) {
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-
-        return () =>
-            h(Doughnut, {
-                chartData: props.data,
-                chartOptions,
-                chartId: props.chartId,
-                width: props.width,
-                height: props.height,
-                cssClasses: props.cssClasses,
-                styles: props.styles,
-                plugins: props.plugins
-            })
-    }
-})
+}
 
 </script>
-
-<style scoped>
-
-</style>

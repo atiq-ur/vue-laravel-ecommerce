@@ -30,6 +30,7 @@ class OrderController extends Controller
 
     public function view(Order $order)
     {
+//        return response()->json($order->user);
         return new OrderResource($order);
     }
 
