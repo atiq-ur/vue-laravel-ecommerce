@@ -1,60 +1,23 @@
-<script>
-import {defineComponent, h} from 'vue'
+<template>
+    <Line :data="data" :options="options"/>
+</template>
+
+<script setup>
+import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js'
 import {Line} from 'vue-chartjs'
-import {Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale} from 'chart.js'
+import {defineProps} from 'vue'
 
-ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale)
+ChartJS.register(ArcElement, Tooltip, Legend)
 
-export default defineComponent({
-    name: 'LineChart',
-    components: {Line},
-    props: {
-        chartId: {
-            type: String,
-            default: 'line-chart'
-        },
-        width: {
-            type: Number,
-            default: 400
-        },
-        height: {
-            type: Number,
-            default: 400
-        },
-        cssClasses: {
-            default: '',
-            type: String
-        },
-        styles: {
-            type: Object,
-            default: () => {
-            }
-        },
-        plugins: {
-            type: Object,
-            default: () => {
-            }
-        },
-        data: {
-            type: Object,
-            required: true
-        }
+const { data} = defineProps({
+    data: Object,
+});
+
+const options = {
+    responsive: true,
+    animation: {
+        duration: 1000
     },
-    setup(props) {
+}
 
-        const chartOptions = {responsive: true}
-
-        return () =>
-            h(Line, {
-                chartData: props.data,
-                chartOptions,
-                chartId: props.chartId,
-                width: props.width,
-                height: props.height,
-                cssClasses: props.cssClasses,
-                styles: props.styles,
-                plugins: props.plugins,
-            })
-    }
-})
 </script>

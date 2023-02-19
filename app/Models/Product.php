@@ -21,6 +21,7 @@ class Product extends Model
         'price',
         'created_by',
         'updated_by',
+        'published',
     ];
     public function getSlugOptions(): SlugOptions
     {

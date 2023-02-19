@@ -102,8 +102,8 @@ import {
     DialogTitle,
 } from '@headlessui/vue'
 import Spinner from "../../components/core/Spinner.vue";
-import store from "../../store/index.js";
 import CustomInput from "../../components/core/CustomInput.vue";
+import store from "../../store/index.js";
 
 const loading = ref(false);
 
@@ -121,6 +121,7 @@ const product = ref({
     image: props.product.image,
     description: props.product.description,
     price: props.product.price,
+    published: props.product.published
 })
 
 const emit = defineEmits(['update:modelValue', 'close'])
@@ -137,6 +138,7 @@ onUpdated(() => {
         image: props.product.image,
         description: props.product.description,
         price: props.product.price,
+        published: props.product.published
     }
 });
 

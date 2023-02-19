@@ -26,6 +26,7 @@ const DEFAULT_EMPTY_PRODUCT = {
     image: '',
     description: '',
     price: '',
+    published: false
 };
 
 const productModel = ref({...DEFAULT_EMPTY_PRODUCT});
